@@ -1,5 +1,7 @@
 package model;
 
+import exceptions.*;
+
 /**
  * A coffee maker used to train baristas.
  *
@@ -42,20 +44,32 @@ public class CoffeeMaker {
 
     //REQUIRES: beans between 2.40 and 2.60 cups, water > 14.75 cups
     //EFFECTS: sets cups remaining to full (20 cups) and time since last brew to 0
-    public void brew(double beans, double water) throws BeansAmountException {
+    public void brew(double beans, double water) throws BeansAmountException, WaterException {
         // TODO: complete the implementation of this method
-        if((beans < 2.4) || (beans > 2.6)) {
-            throw new BeansAmountException(beans);
+        if(beans > 2.6) {
+            throw new TooManyBeansException(beans);
+        }
+        if(beans < 2.4) {
+            throw new NotEnoughBeansException(beans);
+        }
+        if(water <= 14.75){
+            throw new WaterException(water);
         }
         cupsAmount = 20;
         setTimeSinceLastBrew(0);
-        System.out.print("Brewed successfully!");
+        System.out.print("Brewed successfully!\n");
     }
 
     ///REQUIRES: cups remaining > 0, time since last brew < 60
     //MODIFIES: this
     //EFFECTS: subtracts one cup from cups remaining
-    public void pourCoffee() {
+    public void pourCoffee() throws StaleCoffeeException, NoCupsRemainingException {
+        if(timeSinceLastbrew >= 60) {
+            throw new StaleCoffeeException(getTimeSinceLastBrew());
+        }
+        if(cupsAmount == 0){
+            throw new NoCupsRemainingException();
+        }
         // TODO: complete the implementation of this method
         cupsAmount--;
     }
