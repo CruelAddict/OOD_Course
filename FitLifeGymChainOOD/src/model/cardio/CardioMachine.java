@@ -1,6 +1,6 @@
 package model.cardio;
 
-public abstract class CardioMachine {
+public abstract class  CardioMachine {
 
     private int minutes;
     private int level;

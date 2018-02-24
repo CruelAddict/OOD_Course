@@ -2,12 +2,15 @@ package model.pets;
 
 import model.Human;
 
+import java.util.Objects;
+
 public class Pet {
     protected boolean friendly;
     protected boolean needsAttention;
     protected String species;
     protected String color;
     protected double price;
+    protected Human human;
 
     public Pet(String species, String color, boolean friendly, boolean needsAttention, double price){
         this.species = species;
@@ -15,6 +18,7 @@ public class Pet {
         this.friendly = friendly;
         this.needsAttention = needsAttention;
         this.price = price;
+        this.human = null;
     }
 
     public Pet(String species, String color, double price){
@@ -41,7 +45,7 @@ public class Pet {
     }
 
     public Human getHuman() {
-        return null;
+        return human;
     }
 
     //REQUIRES: human != null
@@ -49,7 +53,7 @@ public class Pet {
     //EFFECTS: adopts human, and vice versa
     public void adoptHuman(Human human) {
         System.out.println("Adopting a human!");
-
+        this.human = human;
         if (!human.hasPet(this)){
             human.adoptPet(this);
             System.out.println("Success! Adopted " + human);
@@ -58,12 +62,37 @@ public class Pet {
 
     @Override
     public String toString() {
-        return "Pet {" +
-                "species='" + species + '\'' +
-                ", friendly=" + friendly +
-                ", color='" + color + '\'' +
-                ", price='" + price + '\'' +
-                ", human= " + //TODO 5
-                '}';
+        if(human == null) {
+            return "Pet {" +
+                    "species='" + species + '\'' +
+                    ", friendly=" + friendly +
+                    ", color='" + color + '\'' +
+                    ", price='" + price + '\'' +
+                    ", human= none" + //TODO 5
+                    '}';
+        } else {
+            return "Pet {" +
+                    "species='" + species + '\'' +
+                    ", friendly=" + friendly +
+                    ", color='" + color + '\'' +
+                    ", price='" + price + '\'' +
+                    ", " + human.toString() +'\'' +
+                    '}';
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Pet)) return false;
+        Pet pet = (Pet) o;
+        return Objects.equals(species, pet.species) &&
+                Objects.equals(color, pet.color);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(species, color);
     }
 }
